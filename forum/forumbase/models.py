@@ -11,6 +11,7 @@ class Question(models.Model):
     content = RichTextField()
     likes = models.ManyToManyField(User, related_name='question_post')
     date_created = models.DateTimeField(default=timezone.now)   
+    tags = TaggableManager()
     
     def __str__(self):
         return f'{self.user.username} - Question'
@@ -26,6 +27,7 @@ class Comment(models.Model):
     name = models.CharField(max_length=1000)
     content = RichTextField()
     date_created = models.DateTimeField(default=timezone.now)   
+    tags = TaggableManager()
 
     def __str__(self):
         return '%s - %s' % (self.question.title, self.question.user)
@@ -39,7 +41,6 @@ class Comment(models.Model):
 class Game(models.Model):
     name = models.CharField(max_length=128)
     studio = models.CharField(max_length=64)
-
     tags = TaggableManager()
 
     def __str__(self):
