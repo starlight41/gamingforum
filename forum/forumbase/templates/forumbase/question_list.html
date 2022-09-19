@@ -6,6 +6,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- AlpineJS, HTMX and TailwindCSS -->
+    <script defer src="https://unpkg.com/alpinejs@3.10.3/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.6.0"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <title>Document</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;1,100;1,200;1,300;1,400;1,500&display=swap" rel="stylesheet">
     <style>
@@ -78,6 +83,14 @@
     </style>
 </head>
 <body>
+    <div class="flex items-center">
+        <div class="inline-flex shadow-md hover:shadow-lg focus:shadow-lg" role="group">
+            {% for tag in tags %}
+                <button type="button"
+                        class="rounded-l inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase hover:bg-blue-700 focus:bg-blue-700 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out mr-1">{{ tag.name }}</button>
+            {% endfor %}
+        </div>
+    </div>
     <div class="container">
         <div id="sub-nav">
             <h1 id="fh1">Top Questions</h1>
@@ -88,7 +101,7 @@
             {% endif %}
         </div>
         <div class="list-question">
-            <div class="questions">
+            <div class="questions" x-data="{tag: ''}">
                 {% for question in questions %}
                 <div class="container" style="background: linear-gradient(to right, rgb(255, 226, 182), rgba(255, 166, 0, 0.027)); padding: 5px; box-shadow: rgba(0, 0, 0, 0.383) 0px 5px 5px 0px; border-radius: 15px;" >
                     <div id="title-sec" style="display: flex; align-items: center;">
@@ -101,7 +114,11 @@
                     <h6 id="fh6" style="text-align: left;">{{ question.content|truncatewords:10}} <a href="{% url 'forumbase:question-detail' question.id%}">Read More</a></h6>
                     {% endif %}
                     <h6 id="fh6" style="font-size: 10px; font-style: italic; color: rgb(155, 155, 155);">Asked By: <a href="{% url 'profile' %}">{{ question.user }}</a>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; On: {{question.date_created|date:"j F, Y"}}</h6>
-                    <h5 style="text-align: right; font-size: 12px; font-style: italic;">Tags</h5>
+                    <h5 style="text-align: right; font-size: 12px; font-style: italic;"> Tags:
+                        {% for tag in question.tags.all %}
+                            {{ tag }} 
+                        {% endfor %}
+                    </h5>
                 </div> <br>
                 {% endfor %}
             </div>

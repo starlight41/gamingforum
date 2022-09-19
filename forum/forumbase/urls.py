@@ -17,4 +17,7 @@ urlpatterns = [
     path('questions/<int:pk>/comment/', views.AddCommentView.as_view(), name="question-comment"),
     path('like/<int:pk>', views.like_view, name="like_post"),
     path('profile/', user_view.profile, name="profile"),
+
+    #tags
+    path('question-taglists/', views.QuestionListAPIView.as_view(), name="question-taglists"),
 ]

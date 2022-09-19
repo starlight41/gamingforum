@@ -6,6 +6,11 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from .models import Question, Comment
 from .forms import CommentForm
 from django.urls import reverse, reverse_lazy
+from taggit.models import Tag 
+from forumbase.models import Question
+from forumbase.serializers import QuestionSerializer
+from rest_framework.generics import ListAPIView
+
 
 def home(request):
     return render(request, 'home.html')
@@ -25,10 +30,23 @@ def like_view(request, pk):
         liked = True
     return HttpResponseRedirect(reverse('forumbase:question-detail', args=[str(pk)]))
 
+def index(request):
+        tags = Tag.objects.all()
+        context = {'tags': tags}
+        print(context)
+        return render(request, 'forumbase/question_list.html', context)
+
 class QuestionListView(ListView):
     model = Question
     context_object_name = 'questions'
     ordering = ['-date_created']
+    tags = Tag.objects.all()
+
+    def index(request):
+        tags = Tag.objects.all()
+        context = {'tags': tags}
+        print(context)
+        return render(request, 'forumbase/question_list.html', context)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -107,3 +125,8 @@ class AddCommentView(CreateView):
         form.instance.question_id = self.kwargs['pk']
         return super().form_valid(form)
     success_url = reverse_lazy('forumbase:question-lists')
+
+class QuestionListAPIView(ListAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+
