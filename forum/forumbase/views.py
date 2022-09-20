@@ -30,23 +30,11 @@ def like_view(request, pk):
         liked = True
     return HttpResponseRedirect(reverse('forumbase:question-detail', args=[str(pk)]))
 
-def index(request):
-        tags = Tag.objects.all()
-        context = {'tags': tags}
-        print(context)
-        return render(request, 'forumbase/question_list.html', context)
-
 class QuestionListView(ListView):
     model = Question
     context_object_name = 'questions'
     ordering = ['-date_created']
     tags = Tag.objects.all()
-
-    def index(request):
-        tags = Tag.objects.all()
-        context = {'tags': tags}
-        print(context)
-        return render(request, 'forumbase/question_list.html', context)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -54,6 +42,7 @@ class QuestionListView(ListView):
         if search_input:
             context['questions'] = context['questions'].filter(title__icontains = search_input)
             context['search_input'] = search_input
+        context['tags'] = self.tags
         return context
 
 class QuestionDetailView(DetailView):
