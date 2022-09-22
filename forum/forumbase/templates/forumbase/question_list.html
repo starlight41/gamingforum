@@ -86,12 +86,17 @@
     <div class="flex items-center">
         <div class="inline-flex shadow-md hover:shadow-lg focus:shadow-lg" role="group">
             {% for tag in tags %}
-                <button type="button"
-                        class="rounded-l inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase hover:bg-blue-700 focus:bg-blue-700 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out mr-1">{{ tag.name }}</button>
+            <form method="GET" action="http://127.0.0.1:8000/questions/">
+                <input type="hidden" name="tag" id="tag" value="{{ tag.name }}" />
+                <input type="submit" value="{{ tag.name }}"/>
+            </br>
+            </form>           
             {% endfor %}
         </div>
     </div>
-    <div class="container">
+    <div class="container" 
+        x-data="{tag: '', question: []}"
+        x-init="question = await (await fetch('/questions')).json()">
         <div id="sub-nav">
             <h1 id="fh1">Top Questions</h1>
             {% if user.is_authenticated %}
