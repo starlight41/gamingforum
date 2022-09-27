@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from taggit.managers import TaggableManager
 
+
 class Question(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=10000)

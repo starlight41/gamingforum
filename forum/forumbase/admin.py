@@ -1,9 +1,9 @@
 from django.contrib import admin
 from .models import Question, Comment, Game
 
+
 admin.site.register(Comment)
 admin.site.register(Game)
-
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):

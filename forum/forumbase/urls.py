@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from forumusers import views as user_view 
 
+
 app_name = 'forumbase'
 
 urlpatterns = [
